@@ -156,14 +156,15 @@ info() {
 }
 
 alias_read() {
-    local aliases=
+    local aliases
     if [ -r "$XDG_CONFIG_HOME/vcsh/aliases" ]; then
         aliases="$XDG_CONFIG_HOME/vcsh/aliases"
     elif [ -r /etc/vcsh/aliases ]; then
         aliases=/etc/vcsh/aliases
+	else
+		return
     fi
 
-    [ -z "$aliases" ] && return
     sed -r -e 's/#.*//' -ne 's/(\w+)\s*=\s*(.+)/\1 \2/p' "$aliases"
 }
 
@@ -202,7 +203,9 @@ aliases() {
 	else
 		local a cmd
 		while read a cmd; do
-			echo $a = $cmd
+			if [ -n "$a" ]; then
+				echo $a = $cmd
+			fi
 		done <<< "$(alias_read)"
 	fi
 }
