@@ -612,25 +612,26 @@ if [ -n "$alias" ]; then
 	VCSH_COMMAND="$alias"
 else
 	case $VCSH_COMMAND in
-		clon|clo|cl) ;&
-		commi|comm|com|co) ;&
-		delet|dele|del|de) ;&
-		ente|ent|en) ;&
-		hel|he) ;&
-		ini|in) ;&
-		pul) ;&
-		pus) ;&
-		renam|rena|ren|re) ;&
-		ru) ;&
-		statu|stat|sta|st) ;&
-		upgrad|upgra|upgr|up) ;&
-		versio|versi|vers|ver|ve) ;&
-		which|whi|wh) ;&
-		write|writ|wri|wr)
-			echo "Aliases now dynamically defined. See vcsh(1) for details."
-			exit 1
-			;;
+		clon|clo|cl) old_alias=1 ;;
+		commi|comm|com|co) old_alias=1 ;;
+		delet|dele|del|de) old_alias=1 ;;
+		ente|ent|en) old_alias=1 ;;
+		hel|he) old_alias=1 ;;
+		ini|in) old_alias=1 ;;
+		pul) old_alias=1 ;;
+		pus) old_alias=1 ;;
+		renam|rena|ren|re) old_alias=1 ;;
+		ru) old_alias=1 ;;
+		statu|stat|sta|st) old_alias=1 ;;
+		upgrad|upgra|upgr|up) old_alias=1 ;;
+		versio|versi|vers|ver|ve) old_alias=1 ;;
+		which|whi|wh) old_alias=1 ;;
+		write|writ|wri|wr) old_alias=1 ;;
 	esac
+	if [ -n "$old_alias" ]; then
+		echo "Aliases now dynamically defined. See vcsh(1) for details."
+		exit 1
+	fi
 fi
 
 if [ x"$VCSH_COMMAND" = x'clone' ]; then
