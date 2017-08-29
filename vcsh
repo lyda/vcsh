@@ -171,12 +171,12 @@ alias_read() {
 alias_get() {
 	local a cmd
 	if [ -n "$1" ]; then
-		while read a cmd; do
+		alias_read | while read a cmd; do
 			if [ x"$1" == x"$a" ]; then
 				echo $cmd
 				return
 			fi
-		done <<< "$(alias_read)"
+		done
 	fi
 }
 
@@ -220,11 +220,11 @@ aliases() {
 	else
 		# print all aliases
 		local a cmd
-		while read a cmd; do
+		alias_read | while read a cmd; do
 			if [ -n "$a" ]; then
 				echo $a = $cmd
 			fi
-		done <<< "$(alias_read)"
+		done
 	fi
 }
 
