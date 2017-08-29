@@ -179,11 +179,28 @@ alias_get() {
 	fi
 }
 
+alias_write() {
+	[ -w "$XDG_CONFIG_HOME/vcsh/aliases" ] ||
+	[ ! -e "$XDG_CONFIG_HOME/vcsh/aliases" -a -w "$XDG_CONFIG_HOME/vcsh/" ] ||
+		fatal "File '$XDG_CONFIG_HOME/vcsh/aliases' not writeable"
+	[ "$2" == '=' ] || fatal 'Invalid alias format'
+	if [ -n "$(alias_get $1)" ]; then
+		local regex="s/^$1\s*=.*/$@/"
+		sed -i -re "$regex" "$XDG_CONFIG_HOME/vcsh/aliases"
+	else
+		echo "$@" >> "$XDG_CONFIG_HOME/vcsh/aliases"
+	fi
+}
+
 aliases() {
-	local a cmd
 	if [ -n "$1" ]; then
+		local alias=$(<<<"$@" sed -re 's/(\w+)\s*=\s*(\w.*)/\1 = \2/')
+		if [ -n "$alias" ]; then
+			alias_write $alias
+		fi
 		alias_get "$1"
 	else
+		local a cmd
 		while read a cmd; do
 			echo $a = $cmd
 		done <<< "$(alias_read)"

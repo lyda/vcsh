@@ -5,7 +5,7 @@ vcsh(1) - Version Control System for $HOME - multiple Git repositories in $HOME
 
 `vcsh` [<options>] <command>
 
-`vcsh` alias [<alias-name>]
+`vcsh` alias [<alias>[=<command>]]
 
 `vcsh` clone [-b <branch>] <url> [<repo>]
 
@@ -85,7 +85,11 @@ an interactive user.
 ## COMMANDS
 
 * alias:
-  List defined aliases.
+  List all defined aliases.
+
+  `<alias>`: Print the right side of alias definition.
+
+  `<alias>=<command>`: Add an alias definition to <XDG_CONFIG_HOME/vcsh/aliases>.
 
 * clone:
   Clone an existing repository.
