@@ -211,7 +211,7 @@ aliases() {
 			fi
 		done
 		shift $(($OPTIND - 1))
-		local alias=$(<<<"$@" sed -nre 's/(\w+)\s*=\s*(\w.*)/\1 = \2/p')
+		local alias=$(echo "$@" | sed -nre 's/(\w+)\s*=\s*(\w.*)/\1 = \2/p')
 		if [ -n "$alias" ]; then
 			alias_write $alias
 		else
