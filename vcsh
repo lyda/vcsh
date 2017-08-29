@@ -193,14 +193,32 @@ alias_write() {
 	fi
 }
 
+alias_remove() {
+	[ -w "$XDG_CONFIG_HOME/vcsh/aliases" ] ||
+	[ ! -e "$XDG_CONFIG_HOME/vcsh/aliases" -a -w "$XDG_CONFIG_HOME/vcsh/" ] ||
+		fatal "File '$XDG_CONFIG_HOME/vcsh/aliases' not writeable"
+	[ -n "$1" ] || fatal 'Empty alias'
+	local regex="/^$1\s*=/d"
+	sed -i.bak -re "$regex" "$XDG_CONFIG_HOME/vcsh/aliases"
+}
+
 aliases() {
 	if [ -n "$1" ]; then
-		local alias=$(<<<"$@" sed -re 's/(\w+)\s*=\s*(\w.*)/\1 = \2/')
+		local opts subcmd
+		while getopts d: opts; do
+			if [ $opts == d ]; then
+				alias_remove "$OPTARG"
+			fi
+		done
+		shift $(($OPTIND - 1))
+		local alias=$(<<<"$@" sed -nre 's/(\w+)\s*=\s*(\w.*)/\1 = \2/p')
 		if [ -n "$alias" ]; then
 			alias_write $alias
+		else
+			alias_get "$1"
 		fi
-		alias_get "$1"
 	else
+		# print all aliases
 		local a cmd
 		while read a cmd; do
 			if [ -n "$a" ]; then
