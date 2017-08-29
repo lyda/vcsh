@@ -186,7 +186,7 @@ alias_write() {
 	[ "$2" == '=' ] || fatal 'Invalid alias format'
 	if [ -n "$(alias_get $1)" ]; then
 		local regex="s/^$1\s*=.*/$@/"
-		sed -i -re "$regex" "$XDG_CONFIG_HOME/vcsh/aliases"
+		sed -i.bak -re "$regex" "$XDG_CONFIG_HOME/vcsh/aliases"
 	else
 		echo "$@" >> "$XDG_CONFIG_HOME/vcsh/aliases"
 	fi
